@@ -1,9 +1,9 @@
 import {
-  Entity,
-  Column,
-  PrimaryColumn,
+  BaseEntity,
   BeforeInsert,
-  BaseEntity
+  Column,
+  Entity,
+  PrimaryColumn
 } from "typeorm";
 import * as uuidv4 from "uuid/v4";
 
