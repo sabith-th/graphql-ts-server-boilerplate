@@ -1,4 +1,5 @@
 import * as fs from "fs";
+// tslint:disable-next-line:no-implicit-dependencies
 import { GraphQLSchema } from "graphql";
 import { importSchema } from "graphql-import";
 import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
