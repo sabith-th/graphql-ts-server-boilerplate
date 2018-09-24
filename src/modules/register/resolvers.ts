@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { User } from "../../entity/User";
 import { ResolverMap } from "../../types/graphql-utils";
 import { GQL } from "../../types/schema";
+import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 import { formatYupError } from "../../utils/formatYupError";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
@@ -27,7 +28,11 @@ export const resolvers: ResolverMap = {
     bye: () => "hi"
   },
   Mutation: {
-    register: async (_, args: GQL.IRegisterOnMutationArguments) => {
+    register: async (
+      _,
+      args: GQL.IRegisterOnMutationArguments,
+      { redis, url }
+    ) => {
       try {
         await schema.validate(args, { abortEarly: false });
       } catch (error) {
@@ -52,6 +57,7 @@ export const resolvers: ResolverMap = {
         password: hashedPassword
       });
       await user.save();
+      await createConfirmEmailLink(url, user.id, redis);
       return null;
     }
   }
