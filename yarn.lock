@@ -29,6 +29,14 @@
     "@gql2ts/language-typescript" "^1.9.0"
     "@gql2ts/util" "^1.9.0"
 
+"@gql2ts/from-schema@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.10.0.tgz#56d35294c7f929713241d40129e1ed4265ea032f"
+  dependencies:
+    "@gql2ts/language-typescript" "^1.9.0"
+    "@gql2ts/util" "^1.9.0"
+    dedent "^0.7.0"
+
 "@gql2ts/from-schema@^1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.9.0.tgz#d9d6dd4004c6d4216e940a304d22ca461a040b47"
