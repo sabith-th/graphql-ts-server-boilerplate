@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "graphql-import": "^0.7.1",
     "graphql-request": "^1.8.2",
+    "graphql-tools": "^4.0.0",
     "graphql-yoga": "^1.16.2",
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
