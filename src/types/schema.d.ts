@@ -1,6 +1,5 @@
 // tslint:disable
 // graphql typescript definitions
-
 export namespace GQL {
   interface IGraphQLResponseRoot {
     data?: IQuery | IMutation;
@@ -22,6 +21,8 @@ export namespace GQL {
 
   interface IQuery {
     __typename: "Query";
+    bye2: string | null;
+    bye: string | null;
     hello: string;
   }
 
@@ -31,12 +32,24 @@ export namespace GQL {
 
   interface IMutation {
     __typename: "Mutation";
-    register: boolean;
+    login: Array<IError>;
+    register: Array<IError>;
+  }
+
+  interface ILoginOnMutationArguments {
+    email: string;
+    password: string;
   }
 
   interface IRegisterOnMutationArguments {
     email: string;
     password: string;
+  }
+
+  interface IError {
+    __typename: "Error";
+    path: string;
+    message: string;
   }
 }
 

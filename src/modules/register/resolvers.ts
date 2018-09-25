@@ -58,7 +58,12 @@ export const resolvers: ResolverMap = {
         password: hashedPassword
       });
       await user.save();
-      await sendEmail(email, await createConfirmEmailLink(url, user.id, redis));
+      if (process.env.NODE_ENV === "production") {
+        await sendEmail(
+          email,
+          await createConfirmEmailLink(url, user.id, redis)
+        );
+      }
       return null;
     }
   }
