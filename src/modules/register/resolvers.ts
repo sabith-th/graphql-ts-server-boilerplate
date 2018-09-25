@@ -5,6 +5,7 @@ import { ResolverMap } from "../../types/graphql-utils";
 import { GQL } from "../../types/schema";
 import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 import { formatYupError } from "../../utils/formatYupError";
+import { sendEmail } from "../../utils/sendEmail";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
   INVALID_EMAIL_ERROR_MSG,
@@ -57,7 +58,7 @@ export const resolvers: ResolverMap = {
         password: hashedPassword
       });
       await user.save();
-      await createConfirmEmailLink(url, user.id, redis);
+      await sendEmail(email, await createConfirmEmailLink(url, user.id, redis));
       return null;
     }
   }

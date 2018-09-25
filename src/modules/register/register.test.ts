@@ -1,4 +1,5 @@
 import { request } from "graphql-request";
+import { Connection } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
 import {
@@ -16,8 +17,14 @@ const mutation = (email: string, password: string) => `
   }
 `;
 
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeORMConnection();
+  conn = await createTypeORMConnection();
+});
+
+afterAll(() => {
+  conn.close();
 });
 
 describe("Register resolver tests", async () => {

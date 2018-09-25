@@ -19,7 +19,7 @@ beforeAll(async () => {
   userId = user.id;
 });
 
-afterAll(async () => {
+afterAll(() => {
   conn.close();
 });
 
