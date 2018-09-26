@@ -1,4 +1,5 @@
 import { request } from "graphql-request";
+import { Connection } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
 import { CONFIRM_EMAIL_MSG, INVALID_LOGIN_MSG } from "./errorMessages";
@@ -21,8 +22,14 @@ const loginMutation = (email: string, password: string) => `
   }
 `;
 
+let conn: Connection;
+
 beforeAll(async () => {
-  createTypeORMConnection();
+  conn = await createTypeORMConnection();
+});
+
+afterAll(async () => {
+  await conn.close();
 });
 
 const loginExpectError = async (

@@ -19,8 +19,8 @@ beforeAll(async () => {
   userId = user.id;
 });
 
-afterAll(() => {
-  conn.close();
+afterAll(async () => {
+  await conn.close();
 });
 
 describe("ConfirmEmailLink tests", async () => {

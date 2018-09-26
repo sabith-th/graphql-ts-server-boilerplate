@@ -23,8 +23,8 @@ beforeAll(async () => {
   conn = await createTypeORMConnection();
 });
 
-afterAll(() => {
-  conn.close();
+afterAll(async () => {
+  await conn.close();
 });
 
 describe("Register resolver tests", async () => {
