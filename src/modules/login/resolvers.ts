@@ -1,4 +1,5 @@
 import * as bcrypt from "bcryptjs";
+import { USER_SESSION_ID_PREFIX } from "../../constants";
 import { User } from "../../entity/User";
 import { ResolverMap } from "../../types/graphql-utils";
 import { GQL } from "../../types/schema";
@@ -19,7 +20,7 @@ export const resolvers: ResolverMap = {
     login: async (
       _,
       { email, password }: GQL.ILoginOnMutationArguments,
-      { session }
+      { session, redis, req }
     ) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
@@ -41,6 +42,10 @@ export const resolvers: ResolverMap = {
       }
 
       session.userId = user.id;
+      if (req.sessionID) {
+        await redis.lpush(`${USER_SESSION_ID_PREFIX}${user.id}`, req.sessionID);
+      }
+
       return null;
     }
   }

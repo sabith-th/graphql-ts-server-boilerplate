@@ -3,6 +3,7 @@ import "dotenv/config";
 import * as session from "express-session";
 import { GraphQLServer } from "graphql-yoga";
 import "reflect-metadata";
+import { REDIS_SESSION_PREFIX } from "./constants";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeORMConnection } from "./utils/createTypeORMConnection";
@@ -17,14 +18,18 @@ export const startServer = async () => {
     context: ({ request }) => ({
       redis,
       url: request.protocol + "://" + request.get("host"),
-      session: request.session
+      session: request.session,
+      req: request
     })
   });
 
   server.express.use(
     session({
       name: "qid",
-      store: new RedisStore({}),
+      store: new RedisStore({
+        client: redis as any,
+        prefix: REDIS_SESSION_PREFIX
+      }),
       secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
