@@ -17,6 +17,12 @@ const loginMutation = (e: string, p: string) => `
   }
 `;
 
+const logutMutation = `
+  mutation {
+    logout
+  }
+`;
+
 const meQuery = `
   {
     me {
@@ -40,15 +46,8 @@ afterAll(async () => {
   await conn.close();
 });
 
-describe("me resolver tests", () => {
-  test("should return null if user not logged in", async () => {
-    const response = await axios.post(process.env.TEST_HOST as string, {
-      query: meQuery
-    });
-    expect(response.data.data.me).toBeNull();
-  });
-
-  test("should return current logged in user", async () => {
+describe("logout resolver tests", () => {
+  test("login and logout current user", async () => {
     await axios.post(
       process.env.TEST_HOST as string,
       { query: loginMutation(email, password) },
@@ -65,5 +64,20 @@ describe("me resolver tests", () => {
         email
       }
     });
+    await axios.post(
+      process.env.TEST_HOST as string,
+      {
+        query: logutMutation
+      },
+      {
+        withCredentials: true
+      }
+    );
+    const response2 = await axios.post(
+      process.env.TEST_HOST as string,
+      { query: meQuery },
+      { withCredentials: true }
+    );
+    expect(response2.data.data.me).toBeNull();
   });
 });

@@ -1,6 +1,8 @@
 import * as connectRedis from "connect-redis";
+import "dotenv/config";
 import * as session from "express-session";
 import { GraphQLServer } from "graphql-yoga";
+import "reflect-metadata";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeORMConnection } from "./utils/createTypeORMConnection";
