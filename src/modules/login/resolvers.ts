@@ -3,7 +3,11 @@ import { USER_SESSION_ID_PREFIX } from "../../constants";
 import { User } from "../../entity/User";
 import { ResolverMap } from "../../types/graphql-utils";
 import { GQL } from "../../types/schema";
-import { CONFIRM_EMAIL_MSG, INVALID_LOGIN_MSG } from "./errorMessages";
+import {
+  CONFIRM_EMAIL_MSG,
+  FORGOT_PASSWORD_LOCKED_MSG,
+  INVALID_LOGIN_MSG
+} from "./errorMessages";
 
 const invalidLoginErrorResponse = [
   {
@@ -37,6 +41,15 @@ export const resolvers: ResolverMap = {
           {
             path: "email",
             message: CONFIRM_EMAIL_MSG
+          }
+        ];
+      }
+
+      if (user.forgotPasswordLocked) {
+        return [
+          {
+            path: "email",
+            message: FORGOT_PASSWORD_LOCKED_MSG
           }
         ];
       }

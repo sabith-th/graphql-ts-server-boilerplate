@@ -5,10 +5,10 @@ import { GQL } from "../../types/schema";
 import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 import { formatYupError } from "../../utils/formatYupError";
 import { sendEmail } from "../../utils/sendEmail";
+import { registerPasswordValidation } from "../../yupSchemas";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
-  INVALID_EMAIL_ERROR_MSG,
-  PASSWORD_MIN_LENGTH_ERROR_MSG
+  INVALID_EMAIL_ERROR_MSG
 } from "./errorMessages";
 
 const schema = yup.object().shape({
@@ -17,10 +17,7 @@ const schema = yup.object().shape({
     .min(5)
     .max(255)
     .email(INVALID_EMAIL_ERROR_MSG),
-  password: yup
-    .string()
-    .min(5, PASSWORD_MIN_LENGTH_ERROR_MSG)
-    .max(255)
+  password: registerPasswordValidation
 });
 
 export const resolvers: ResolverMap = {
