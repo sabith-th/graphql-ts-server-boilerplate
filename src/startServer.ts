@@ -11,6 +11,7 @@ import { REDIS_SESSION_PREFIX } from "./constants";
 import { User } from "./entity/User";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
+import { createTestConnection } from "./testUtils/createTestConnection";
 import { createTypeORMConnection } from "./utils/createTypeORMConnection";
 import { genSchema } from "./utils/genSchema";
 
@@ -18,6 +19,10 @@ const SESSION_SECRET = "hellothere";
 const RedisStore = connectRedis(session);
 
 export const startServer = async () => {
+  if (process.env.NODE_ENV === "test") {
+    await redis.flushall();
+  }
+
   const server = new GraphQLServer({
     schema: genSchema(),
     context: ({ request }) => ({
@@ -67,7 +72,10 @@ export const startServer = async () => {
 
   server.express.get("/confirm/:id", confirmEmail);
 
-  const connection = await createTypeORMConnection();
+  const connection =
+    process.env.NODE_ENV === "test"
+      ? await createTestConnection(true)
+      : await createTypeORMConnection();
 
   passport.use(
     new Strategy(

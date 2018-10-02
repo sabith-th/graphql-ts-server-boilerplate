@@ -1,9 +1,10 @@
+import * as faker from "faker";
 import * as Redis from "ioredis";
 import fetch from "node-fetch";
 import { Connection } from "typeorm";
-import { User } from "../entity/User";
+import { User } from "../../entity/User";
+import { createTestConnection } from "../../testUtils/createTestConnection";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
-import { createTypeORMConnection } from "./createTypeORMConnection";
 
 let userId: string;
 const redis = new Redis();
@@ -11,10 +12,10 @@ const redis = new Redis();
 let conn: Connection;
 
 beforeAll(async () => {
-  conn = await createTypeORMConnection();
+  conn = await createTestConnection();
   const user = await User.create({
-    email: "testuser@test.com",
-    password: "password"
+    email: faker.internet.email(),
+    password: faker.internet.email()
   }).save();
   userId = user.id;
 });

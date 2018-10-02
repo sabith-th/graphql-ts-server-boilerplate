@@ -1,6 +1,7 @@
+import * as faker from "faker";
 import { Connection } from "typeorm";
 import { User } from "../../entity/User";
-import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
+import { createTestConnection } from "../../testUtils/createTestConnection";
 import { TestClient } from "../../utils/TestClient";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
@@ -9,9 +10,11 @@ import {
 } from "./errorMessages";
 
 let conn: Connection;
+const email = faker.internet.email();
+const password = faker.internet.password();
 
 beforeAll(async () => {
-  conn = await createTypeORMConnection();
+  conn = await createTestConnection();
 });
 
 afterAll(async () => {
@@ -20,8 +23,6 @@ afterAll(async () => {
 
 describe("Register resolver tests", async () => {
   test("Register user on success should return null and add user to db", async () => {
-    const email = "user@test.com";
-    const password = "tester";
     const client = new TestClient(process.env.TEST_HOST as string);
     const response = await client.register(email, password);
     expect(response.data).toEqual({ register: null });
@@ -33,8 +34,6 @@ describe("Register resolver tests", async () => {
   });
 
   test("Registering user with same email should return an array with error message", async () => {
-    const email = "user@test.com";
-    const password = "tester";
     const client = new TestClient(process.env.TEST_HOST as string);
     const response = await client.register(email, password);
     expect(response.data.register).toHaveLength(1);
@@ -45,10 +44,8 @@ describe("Register resolver tests", async () => {
   });
 
   test("Email should be proper and password should be atleast five characters", async () => {
-    const email = "usertest.com";
-    const password = "tes";
     const client = new TestClient(process.env.TEST_HOST as string);
-    const response = await client.register(email, password);
+    const response = await client.register("fakeemail", "pas");
     expect(response.data.register).toHaveLength(2);
     expect(response.data.register[0].path).toEqual("email");
     expect(response.data.register[0].message).toEqual(INVALID_EMAIL_ERROR_MSG);

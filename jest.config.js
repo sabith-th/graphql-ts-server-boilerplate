@@ -1,5 +1,5 @@
 module.exports = {
-  globalSetup: "./src/testSetup/callSetup.js",
+  globalSetup: "./src/testUtils/callSetup.js",
   preset: "ts-jest",
   testEnvironment: "node"
 };

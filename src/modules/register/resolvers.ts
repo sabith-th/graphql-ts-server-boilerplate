@@ -2,10 +2,10 @@ import * as yup from "yup";
 import { User } from "../../entity/User";
 import { ResolverMap } from "../../types/graphql-utils";
 import { GQL } from "../../types/schema";
-import { createConfirmEmailLink } from "../../utils/createConfirmEmailLink";
 import { formatYupError } from "../../utils/formatYupError";
 import { sendEmail } from "../../utils/sendEmail";
 import { registerPasswordValidation } from "../../yupSchemas";
+import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
   INVALID_EMAIL_ERROR_MSG

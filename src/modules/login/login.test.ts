@@ -1,3 +1,4 @@
+import * as faker from "faker";
 import { Connection } from "typeorm";
 import { User } from "../../entity/User";
 import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
@@ -5,6 +6,8 @@ import { TestClient } from "../../utils/TestClient";
 import { CONFIRM_EMAIL_MSG, INVALID_LOGIN_MSG } from "./errorMessages";
 
 let conn: Connection;
+const email = faker.internet.email();
+const password = faker.internet.password();
 
 beforeAll(async () => {
   conn = await createTypeORMConnection();
@@ -14,13 +17,9 @@ afterAll(async () => {
   await conn.close();
 });
 
-const loginExpectError = async (
-  email: string,
-  password: string,
-  errorMessage: string
-) => {
+const loginExpectError = async (e: string, p: string, errorMessage: string) => {
   const client = new TestClient(process.env.TEST_HOST as string);
-  const response = await client.login(email, password);
+  const response = await client.login(e, p);
   expect(response.data).toEqual({
     login: [
       {
@@ -33,15 +32,15 @@ const loginExpectError = async (
 
 describe("Login resolver tests", async () => {
   test("bad email should return error response", async () => {
-    const email = "invalid@user.com";
-    const password = "tester";
-    await loginExpectError(email, password, INVALID_LOGIN_MSG);
+    await loginExpectError(
+      faker.internet.email(),
+      faker.internet.password(),
+      INVALID_LOGIN_MSG
+    );
   });
 
   test("bad password should return error response", async () => {
-    const email = "valid@user.com";
-    const password = "tester";
-    const invalidPassword = "notTester";
+    const invalidPassword = faker.internet.password();
     const client = new TestClient(process.env.TEST_HOST as string);
     const registerResponse = await client.register(email, password);
     expect(registerResponse.data).toEqual({ register: null });
@@ -49,14 +48,10 @@ describe("Login resolver tests", async () => {
   });
 
   test("not confirmed users should get not confirmed message", async () => {
-    const email = "valid@user.com";
-    const password = "tester";
     await loginExpectError(email, password, CONFIRM_EMAIL_MSG);
   });
 
   test("confirmed users should get null response", async () => {
-    const email = "valid@user.com";
-    const password = "tester";
     const client = new TestClient(process.env.TEST_HOST as string);
     await User.update({ email }, { confirmed: true });
     const response = await client.login(email, password);

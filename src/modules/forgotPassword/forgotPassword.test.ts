@@ -1,8 +1,9 @@
+import * as faker from "faker";
 import * as Redis from "ioredis";
 import { Connection } from "typeorm";
 import { User } from "../../entity/User";
+import { createTestConnection } from "../../testUtils/createTestConnection";
 import { createForgotPasswordLink } from "../../utils/createForgotPasswordLink";
-import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
 import { forgotPasswordLockAccount } from "../../utils/forgotPasswordLockAccount";
 import { TestClient } from "../../utils/TestClient";
 import { FORGOT_PASSWORD_LOCKED_MSG } from "../login/errorMessages";
@@ -12,12 +13,12 @@ import { EXPIRED_KEY_ERROR_MSG } from "./errorMessages";
 const redis = new Redis();
 let userId: string;
 let conn: Connection;
-const email = "testuser2@test.com";
-const password = "password";
-const newPassword = "newPassword";
+const email = faker.internet.email();
+const password = faker.internet.password();
+const newPassword = faker.internet.password();
 
 beforeAll(async () => {
-  conn = await createTypeORMConnection();
+  conn = await createTestConnection();
   const user = await User.create({
     email,
     password,
@@ -68,7 +69,9 @@ describe("forgotPassword resolver tests", () => {
     expect(response.data).toEqual({ forgotPasswordChange: null });
 
     // Ensure user is not able to change password again with same key
-    expect(await client.forgotPasswordChange("newPasswordAgain", key)).toEqual({
+    expect(
+      await client.forgotPasswordChange(faker.internet.password(), key)
+    ).toEqual({
       data: {
         forgotPasswordChange: [
           {
