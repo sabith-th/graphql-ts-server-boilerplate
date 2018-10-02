@@ -3,9 +3,12 @@ import "dotenv/config";
 import * as RateLimit from "express-rate-limit";
 import * as session from "express-session";
 import { GraphQLServer } from "graphql-yoga";
+import * as passport from "passport";
+import { Strategy } from "passport-twitter";
 import * as RateLimitRedisStore from "rate-limit-redis";
 import "reflect-metadata";
 import { REDIS_SESSION_PREFIX } from "./constants";
+import { User } from "./entity/User";
 import { redis } from "./redis";
 import { confirmEmail } from "./routes/confirmEmail";
 import { createTypeORMConnection } from "./utils/createTypeORMConnection";
@@ -64,7 +67,56 @@ export const startServer = async () => {
 
   server.express.get("/confirm/:id", confirmEmail);
 
-  await createTypeORMConnection();
+  const connection = await createTypeORMConnection();
+
+  passport.use(
+    new Strategy(
+      {
+        consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+        consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
+        callbackURL: process.env.CALLBACK_URL as string,
+        includeEmail: true
+      },
+      async (_: any, __: any, profile: any, cb: any) => {
+        const { id, emails } = profile;
+        const query = connection
+          .getRepository(User)
+          .createQueryBuilder("user")
+          .where("user.twitterId = :id", { id });
+        let email: string | null = null;
+        if (emails) {
+          email = emails[0].value;
+          query.orWhere("user.email = :email", { email });
+        }
+        let user = await query.getOne();
+        if (!user) {
+          user = await User.create({
+            twitterId: id,
+            email
+          }).save();
+        } else if (!user.twitterId) {
+          user.twitterId = id;
+          user = await user.save();
+        }
+        return cb(null, { id: user.id });
+      }
+    )
+  );
+
+  server.express.use(passport.initialize());
+
+  server.express.get("/auth/twitter", passport.authenticate("twitter"));
+
+  server.express.get(
+    "/auth/twitter/callback",
+    passport.authenticate("twitter", { session: false }),
+    (req, res) => {
+      (req.session as any).userId = req.user.id;
+      // @todo: redirect to frontend
+      res.redirect("/");
+    }
+  );
+
   const app = await server.start({
     cors,
     port: process.env.NODE_ENV === "test" ? 0 : 4000
