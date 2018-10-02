@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { PASSWORD_MIN_LENGTH_ERROR_MSG } from "./modules/register/errorMessages";
+import { PASSWORD_MIN_LENGTH_ERROR_MSG } from "./modules/user/register/errorMessages";
 
 export const registerPasswordValidation = yup
   .string()

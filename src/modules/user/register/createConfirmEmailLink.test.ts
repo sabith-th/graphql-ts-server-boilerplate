@@ -2,8 +2,8 @@ import * as faker from "faker";
 import * as Redis from "ioredis";
 import fetch from "node-fetch";
 import { Connection } from "typeorm";
-import { User } from "../../entity/User";
-import { createTestConnection } from "../../testUtils/createTestConnection";
+import { User } from "../../../entity/User";
+import { createTestConnection } from "../../../testUtils/createTestConnection";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 
 let userId: string;

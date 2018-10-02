@@ -1,8 +1,8 @@
 import * as bcrypt from "bcryptjs";
-import { USER_SESSION_ID_PREFIX } from "../../constants";
-import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { GQL } from "../../types/schema";
+import { USER_SESSION_ID_PREFIX } from "../../../constants";
+import { User } from "../../../entity/User";
+import { ResolverMap } from "../../../types/graphql-utils";
+import { GQL } from "../../../types/schema";
 import {
   CONFIRM_EMAIL_MSG,
   FORGOT_PASSWORD_LOCKED_MSG,
@@ -17,9 +17,6 @@ const invalidLoginErrorResponse = [
 ];
 
 export const resolvers: ResolverMap = {
-  Query: {
-    bye2: () => "hi"
-  },
   Mutation: {
     login: async (
       _,
@@ -31,7 +28,7 @@ export const resolvers: ResolverMap = {
         return invalidLoginErrorResponse;
       }
 
-      const valid = await bcrypt.compare(password, user.password);
+      const valid = await bcrypt.compare(password, user.password as string);
       if (!valid) {
         return invalidLoginErrorResponse;
       }

@@ -21,7 +21,8 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "rate-limit-redis": ["./src/types/rate-limit-redis"]
+      "rate-limit-redis": ["./src/types/rate-limit-redis"],
+      "merge-graphql-schemas": ["./src/types/merge-graphql-schemas"]
     }
   },
   "exclude": ["node_modules"],

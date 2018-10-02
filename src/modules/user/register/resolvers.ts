@@ -1,10 +1,10 @@
 import * as yup from "yup";
-import { User } from "../../entity/User";
-import { ResolverMap } from "../../types/graphql-utils";
-import { GQL } from "../../types/schema";
-import { formatYupError } from "../../utils/formatYupError";
-import { sendEmail } from "../../utils/sendEmail";
-import { registerPasswordValidation } from "../../yupSchemas";
+import { User } from "../../../entity/User";
+import { ResolverMap } from "../../../types/graphql-utils";
+import { GQL } from "../../../types/schema";
+import { formatYupError } from "../../../utils/formatYupError";
+import { sendEmail } from "../../../utils/sendEmail";
+import { registerPasswordValidation } from "../../../yupSchemas";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import {
   DUPLICATE_EMAIL_ERROR_MSG,
@@ -21,9 +21,6 @@ const schema = yup.object().shape({
 });
 
 export const resolvers: ResolverMap = {
-  Query: {
-    bye: () => "hi"
-  },
   Mutation: {
     register: async (
       _,

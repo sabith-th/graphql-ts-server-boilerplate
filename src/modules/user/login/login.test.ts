@@ -1,8 +1,8 @@
 import * as faker from "faker";
 import { Connection } from "typeorm";
-import { User } from "../../entity/User";
-import { createTypeORMConnection } from "../../utils/createTypeORMConnection";
-import { TestClient } from "../../utils/TestClient";
+import { User } from "../../../entity/User";
+import { createTypeORMConnection } from "../../../utils/createTypeORMConnection";
+import { TestClient } from "../../../utils/TestClient";
 import { CONFIRM_EMAIL_MSG, INVALID_LOGIN_MSG } from "./errorMessages";
 
 let conn: Connection;
