@@ -6,6 +6,7 @@ import { TestClient } from "../../../utils/TestClient";
 import { CONFIRM_EMAIL_MSG, INVALID_LOGIN_MSG } from "./errorMessages";
 
 let conn: Connection;
+faker.seed(process.hrtime()[1]);
 const email = faker.internet.email();
 const password = faker.internet.password();
 

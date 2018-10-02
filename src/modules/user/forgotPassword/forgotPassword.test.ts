@@ -13,6 +13,7 @@ import { EXPIRED_KEY_ERROR_MSG } from "./errorMessages";
 const redis = new Redis();
 let userId: string;
 let conn: Connection;
+faker.seed(process.hrtime()[1]);
 const email = faker.internet.email();
 const password = faker.internet.password();
 const newPassword = faker.internet.password();

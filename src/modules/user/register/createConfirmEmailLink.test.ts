@@ -8,6 +8,7 @@ import { createConfirmEmailLink } from "./createConfirmEmailLink";
 
 let userId: string;
 const redis = new Redis();
+faker.seed(process.hrtime()[1]);
 
 let conn: Connection;
 
