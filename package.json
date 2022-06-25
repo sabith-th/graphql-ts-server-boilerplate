@@ -45,7 +45,7 @@
     "graphql-yoga": "^1.16.2",
     "ioredis": "^4.0.0",
     "merge-graphql-schemas": "^1.5.7",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
     "pg": "^7.3.0",
